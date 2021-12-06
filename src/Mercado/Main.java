@@ -6,13 +6,14 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static int idboleta;
+
     public static void main(String[] args) {
 
         Scanner reader = new Scanner(System.in);
 
         int opcion = 0;
         do {
-            System.out.println();
             System.out.println("Opciones CRUD clientes \n"
                     +"1. Crear cliente \n"
                     +"2. Listar clientes \n"
@@ -26,7 +27,7 @@ public class Main {
                     +"8. Editar cajeros \n");
             System.out.println("------------------");
             System.out.println("Opciones CRUD Productos \n"
-                    +"9. Crear productos \n"
+                    +"9. Crear productos (utilizar 'coma' y no 'punto')\n"
                     +"10. Listar productos \n"
                     +"11. Eliminar productos \n"
                     +"12. Editar productos \n");
@@ -35,9 +36,12 @@ public class Main {
                     +"13. Crear reponedor \n"
                     +"14. Listar reponedores \n"
                     +"15. Eliminar reponedor \n"
-                    +"16. Edtiar reponedor \n"
-                    +"17. Salir");
+                    +"16. Edtiar reponedor \n");
             System.out.println("------------------");
+            System.out.println("Gestión de boleta \n"
+                    +"17. Crear boleta y asociarla a un cliente, cajero y caja \n"
+                    +"18. Listar los productos dentro de la boleta");
+            System.out.println(">");
 
             //Se lee la opción del usuario
             opcion = reader.nextInt();
@@ -91,10 +95,15 @@ public class Main {
                 case 16:
                     Servicios.editarReponedor();
                     break;
+                case 17:
+                    Servicios.crearBoleta();
+                case 18:
+                    Servicios.mostarBoleta();
+                    break;
                 default:
                     break;
             }
-        }while (opcion != 17);
+        }while (opcion != 19);
         Conexion conexion = new Conexion();
 
         try(Connection cnx = conexion.get_connection()) {

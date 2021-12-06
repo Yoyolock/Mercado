@@ -2,7 +2,7 @@ package Mercado;
 
 public class Cliente extends Persona{
 
-    private int IDcliente;
+    private int idcliente;
 
     public Cliente(){
 
@@ -12,11 +12,11 @@ public class Cliente extends Persona{
         super(namePersona);
     }
 
-    public void setIDcliente(int IDcliente) {
-        this.IDcliente = IDcliente;
+    public void setidcliente(int idcliente) {
+        this.idcliente = idcliente;
     }
 
-    public int getIDcliente() {
-        return IDcliente;
+    public int getidcliente() {
+        return idcliente;
     }
 }

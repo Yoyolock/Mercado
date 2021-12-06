@@ -1,31 +1,50 @@
 package Mercado;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+
 public class Boleta {
 
-    private int IDboleta;
-    private String numBoleta;
-    private String [] boletas;
+    private int idboleta;
+    private int idcajeros;
+    private int idcliente;
+    private int idcaja;
 
-    public Boleta(){
+    public Boleta() {
 
     }
-    public Boleta(String numBoleta){
-        this.numBoleta = numBoleta;
+
+    public int getIdboleta() {
+        return idboleta;
     }
 
-    public String getNumBoleta() {
-        return numBoleta;
+    public void setIdboleta(int idboleta) {
+        this.idboleta = idboleta;
     }
 
-    public void setNumBoleta(String numBoleta) {
-        this.numBoleta = numBoleta;
+    public int getIdcaja() {
+        return idcaja;
     }
 
-    public String[] getBoletas() {
-        return boletas;
+    public int getIdcajeros() {
+        return idcajeros;
     }
 
-    public void setBoletas(String[] boletas) {
-        this.boletas = boletas;
+    public int getIdcliente() {
+        return idcliente;
+    }
+
+    public void setIdcaja(int idcaja) {
+        this.idcaja = idcaja;
+    }
+
+    public void setIdcajeros(int idcajeros) {
+        this.idcajeros = idcajeros;
+    }
+
+    public void setIdcliente(int idcliente) {
+        this.idcliente = idcliente;
     }
 }

@@ -2,21 +2,16 @@ package Mercado;
 
 public class Caja {
     private int IDcaja;
-    private String numCaja;
 
-    public Caja(){
+    public Caja() {
 
     }
 
-    public Caja(String numCaja){
-        this.numCaja = numCaja;
+    public int getIDcaja() {
+        return IDcaja;
     }
 
-    public String getNumCaja() {
-        return numCaja;
-    }
-
-    public void setNumCaja(String numCaja) {
-        this.numCaja = numCaja;
+    public void setIDcaja(int IDcaja) {
+        this.IDcaja = IDcaja;
     }
 }

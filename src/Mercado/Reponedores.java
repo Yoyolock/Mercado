@@ -2,18 +2,18 @@ package Mercado;
 
 public class Reponedores extends Persona {
 
-    private int IDreponedor;
+    private int idreponedor;
 
-    public Reponedores(int IDreponedor, String namePersona) {
+    public Reponedores(int idreponedor, String namePersona) {
         super(namePersona);
     }
     public Reponedores() {
     }
     public int getIDreponedor() {
-        return IDreponedor;
+        return idreponedor;
     }
 
-    public void setIDreponedor(int IDreponedor) {
-        this.IDreponedor = IDreponedor;
+    public void setIDreponedor(int idreponedor) {
+        this.idreponedor = idreponedor;
     }
 }

@@ -6,7 +6,7 @@ public class Servicios {
 
     //SE CREAN LOS SERVICIOS CORRESPONDIENTE A LOS CLIENTES
 
-    public static void crearCliente(){
+    public static void crearCliente() {
         Scanner reader = new Scanner(System.in);
 
         System.out.println("indique el nombre del cliente");
@@ -23,8 +23,8 @@ public class Servicios {
     public static void borrarCliente(){
         Scanner reader = new Scanner(System.in);
         System.out.println("Indica la ID del cliente");
-        int IDcliente = reader.nextInt();
-        Funciones.borrarClienteDB(IDcliente);
+        int idcliente = reader.nextInt();
+        Funciones.borrarClienteDB(idcliente);
     }
     public static void editarCliente(){
         Scanner reader = new Scanner(System.in);
@@ -32,9 +32,9 @@ public class Servicios {
         String name = reader.nextLine();
 
         System.out.println("Indique la ID del cliente a modificar");
-        int IDcliente = reader.nextInt();
+        int idcliente = reader.nextInt();
         Cliente update = new Cliente();
-        update.setIDcliente(IDcliente);
+        update.setidcliente(idcliente);
         update.setNamePersona(name);
         Funciones.editarClientesDB(update);
     }
@@ -47,8 +47,12 @@ public class Servicios {
         System.out.println("Escriba el nombre de el/la cajero/a");
         String name = reader.nextLine();
 
+        System.out.println("Asocie el cajero a la ID de alguna caja");
+        int idcaja = reader.nextInt();
+
         Cajeros registro = new Cajeros();
         registro.setNamePersona(name);
+        registro.setIdcaja(idcaja);
 
         Funciones.crearCajeroDB(registro);
     }
@@ -88,7 +92,7 @@ public class Servicios {
         String nameProducto = reader.nextLine();
 
         System.out.println("Indica el precio del producto");
-        String precio = reader.nextLine();
+        Float precio = reader.nextFloat();
 
         Productos registro = new Productos();
         registro.setNameProducto(nameProducto);
@@ -115,7 +119,7 @@ public class Servicios {
         int IDproducto = reader.nextInt();
 
         System.out.println("Elige el nuevo precio de el producto");
-        String precio = reader.nextLine();
+        Float precio = reader.nextFloat();
 
         Productos actualizacion = new Productos();
         actualizacion.setIDproducto(IDproducto);
@@ -124,7 +128,7 @@ public class Servicios {
         Funciones.editarProductosDB(actualizacion);
     }
 
-    //SE CREAN SERVICIOS
+    //SE CREAN SERVICIOS DE REPONEDOR
 
     public static void crearReponedor(){
         Scanner reader = new Scanner(System.in);
@@ -160,4 +164,28 @@ public class Servicios {
         Funciones.actualizarReponedorDB(actualizacion);
     }
 
+    //SE CREAN LOS SERVICIOS CORRESPONDIENTES A LA BOLETA
+
+    public static void crearBoleta(){
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Asigne la boleta a la ID de un cliente");
+        int idcliente = reader.nextInt();
+
+        System.out.println("Asigne la boleta a la ID de un cajero");
+        int idcajeros = reader.nextInt();
+
+        System.out.println("Asigne la boleta a la ID de una caja");
+        int idcaja = reader.nextInt();
+
+        Boleta registro = new Boleta();
+        registro.setIdcliente(idcliente);
+        registro.setIdcajeros(idcajeros);
+        registro.setIdcaja(idcaja);
+
+        Funciones.crearBoletaDB(registro);
+    }
+    public static void mostarBoleta(){
+        Funciones.mostrarBoletaDB();
+    }
 }

@@ -2,16 +2,17 @@ package Mercado;
 
 public class Productos {
 
-    int IDproducto;
+    int idproducto;
     String nameProducto;
-    private String precio;
+    private float precio;
+
 
 
     public Productos(){
 
     }
-    public void setIDproducto(int IDproducto) {
-        this.IDproducto = IDproducto;
+    public void setIDproducto(int idproducto) {
+        this.idproducto = idproducto;
     }
 
     public void setNameProducto(String nameProducto) {
@@ -19,18 +20,18 @@ public class Productos {
     }
 
     public int getIDproducto() {
-        return IDproducto;
+        return idproducto;
     }
 
     public String getNameProducto() {
         return nameProducto;
     }
 
-    public String getPrecio() {
+    public float getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(float precio) {
         this.precio = precio;
     }
 }

@@ -1,9 +1,9 @@
 package Mercado;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class Funciones {
 
@@ -19,6 +19,7 @@ public class Funciones {
                 ps = connection.prepareStatement(query);
                 ps.setString(1, cliente.getNamePersona());
                 ps.executeUpdate();
+                System.out.println("Se registró cliente de forma exitosa");
             }catch (SQLException ex){
                 System.out.println(ex);
             }
@@ -71,10 +72,10 @@ public class Funciones {
         try (Connection connection = dbConnect.get_connection()){
             PreparedStatement ps = null;
             try {
-                String query = "UPDATE Clientes SET namePersona = ? WHERE IDcliente = ?";
+                String query = "UPDATE Clientes SET namePersona = ? WHERE idcliente = ?";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, cliente.getNamePersona());
-                ps.setInt(2, cliente.getIDcliente());
+                ps.setInt(2, cliente.getidcliente());
                 ps.executeUpdate();
                 System.out.println("Cliente se ha actulizado de forma exitosa");
             }catch (SQLException e){
@@ -94,10 +95,10 @@ public class Funciones {
         try (Connection connection = dbConnect.get_connection()){
             PreparedStatement ps = null;
             try {
-                String query = "INSERT INTO Cajeros (namePersona, IDcaja) VALUES (?,?)";
+                String query = "INSERT INTO Cajeros (namePersona, idcaja) VALUES (?,?)";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, cajeros.getNamePersona());
-                ps.setInt(2, cajeros.getIDcaja());
+                ps.setInt(2, cajeros.getidcaja());
                 ps.executeUpdate();
                 System.out.println("Se creó el cajero de forma existosa");
             }catch (SQLException e){
@@ -181,7 +182,7 @@ public class Funciones {
                 String query = "INSERT INTO Productos (nameProducto, precio) VALUES (?,?)";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, productos.getNameProducto());
-                ps.setString(2, productos.getPrecio());
+                ps.setFloat(2, productos.getPrecio());
                 ps.executeUpdate();
                 System.out.println("Se añadió el producto de forma exitosa");
             }catch (SQLException ex){
@@ -240,7 +241,7 @@ public class Funciones {
                 String query = "UPDATE productos SET nameproducto = ?, precio = ? WHERE idproducto = ?";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, productos.getNameProducto());
-                ps.setString(2, productos.getPrecio());
+                ps.setFloat(2, productos.getPrecio());
                 ps.setInt(3, productos.getIDproducto());
                 ps.executeUpdate();
                 System.out.println("La información se ha actualizado exitosamente");
@@ -332,4 +333,60 @@ public class Funciones {
             System.out.println(e);
         }
     }
+    public static void crearBoletaDB(Boleta boleta){
+        Conexion dbConnect = new Conexion();
+
+        try (Connection connection = dbConnect.get_connection()){
+            PreparedStatement ps = null;
+            try {
+                String query = "INSERT INTO boleta (idboleta, idcaja, idcajeros, idcliente, fecha) VALUES (?,?,?,?,?)";
+                ps = connection.prepareStatement(query);
+                ps.setInt(1, boleta.getIdboleta());
+                ps.setInt(2, boleta.getIdcaja());
+                ps.setInt(3, boleta.getIdcajeros());
+                ps.setInt(4, boleta.getIdcliente());
+                ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+                ps.setTimestamp(5, Timestamp.from(Instant.now()));
+                ps.executeUpdate();
+                System.out.println("Operación realizada exitosamente");
+            }catch (SQLException e){
+                System.out.println(e);
+            }
+        }catch (SQLException e){
+        }
+    }
+
+    public static DefaultTableModel atributosProductos(){
+        DefaultTableModel dt = new DefaultTableModel();
+        dt.addColumn("idproducto");
+        dt.addColumn("nameproducto");
+        dt.addColumn("precio");
+        return dt;
+    }
+
+    public static void mostrarBoletaDB(){
+        Conexion dbConnect = new Conexion();
+        DefaultTableModel dt = new DefaultTableModel();
+        atributosProductos();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try (Connection connection = dbConnect.get_connection()){
+            String query = "SELECT * FROM productos";
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            Object[] fila = new Object[3];
+            while (rs.next()){
+                fila[0] = rs.getInt(1);
+                fila[1] = rs.getString(2);
+                fila[2] = rs.getFloat(3);
+                dt.addRow(fila);
+            }
+
+        }catch (SQLException e){
+            System.out.println("No se pudo listar los productos");
+            System.out.println(e);
+        }
+    }
+
 }
