@@ -5,6 +5,7 @@ public class Productos {
     int idproducto;
     String nameProducto;
     private float precio;
+    private int cantidad;
 
 
 

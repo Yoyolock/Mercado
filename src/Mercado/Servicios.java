@@ -169,6 +169,9 @@ public class Servicios {
     public static void crearBoleta(){
         Scanner reader = new Scanner(System.in);
 
+        System.out.println("Genere la ID de una boleta");
+        int idboleta = reader.nextInt();
+
         System.out.println("Asigne la boleta a la ID de un cliente");
         int idcliente = reader.nextInt();
 
@@ -179,6 +182,7 @@ public class Servicios {
         int idcaja = reader.nextInt();
 
         Boleta registro = new Boleta();
+        registro.setIdboleta(idboleta);
         registro.setIdcliente(idcliente);
         registro.setIdcajeros(idcajeros);
         registro.setIdcaja(idcaja);
@@ -186,6 +190,11 @@ public class Servicios {
         Funciones.crearBoletaDB(registro);
     }
     public static void mostarBoleta(){
-        Funciones.mostrarBoletaDB();
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Indique cual es la ID de la boleta a vizualizar");
+        int idboletaquery = reader.nextInt();
+
+        Funciones.mostrarBoletaDB(idboletaquery);
     }
 }
