@@ -27,7 +27,7 @@ public class Main {
                     +"8. Editar cajeros \n");
             System.out.println("------------------");
             System.out.println("Opciones CRUD Productos \n"
-                    +"9. Crear productos (utilizar 'coma' y no 'punto')\n"
+                    +"9. Crear productos (para los precios: utilizar 'coma' y no 'punto')\n"
                     +"10. Listar productos \n"
                     +"11. Eliminar productos \n"
                     +"12. Editar productos \n");
@@ -40,8 +40,19 @@ public class Main {
             System.out.println("------------------");
             System.out.println("Gestión de boleta \n"
                     +"17. Crear boleta y asociarla a un cliente, cajero y caja \n"
-                    +"18. Listar los productos dentro de la boleta");
-            System.out.println(">");
+                    +"18. Listar los productos dentro de la boleta\n");
+            System.out.println("------------------\n"
+                    +"Opciones de Horario\n"
+                    +"19. Registrar horario\n"
+                    +"20. Registrar entrada\n"
+                    +"21. Registrar Salida\n"
+                    +"22. Listar Horarios\n");
+            System.out.println("------------------\n"
+                    +"Opciones del cierre de caja\n"
+                    +"23. Configurar cierre de caja\n"
+                    +"24. Mostrar cierre de caja\n"
+                    +"25. Salir\n"
+                    +"-> ");
 
             //Se lee la opción del usuario
             opcion = reader.nextInt();
@@ -97,17 +108,34 @@ public class Main {
                     break;
                 case 17:
                     Servicios.crearBoleta();
+                    break;
                 case 18:
                     Servicios.mostarBoleta();
                     break;
+                case 19:
+                    Servicios.registrarHorario();
+                    break;
+                case 20:
+                    Servicios.registrarEntrada();
+                    break;
+                case 21:
+                    Servicios.registrarSalida();
+                    break;
+                case 22:
+                    Servicios.mostrarHorarios();
+                    break;
+                case 23:
+                    Servicios.cierreDeCaja();
+                    break;
+                case 24:
+                    Servicios.mostrarCierreDeCaja();
                 default:
                     break;
             }
-        }while (opcion != 19);
+        }while (opcion != 25);
         Conexion conexion = new Conexion();
 
         try(Connection cnx = conexion.get_connection()) {
-
         }catch (SQLException e){
             System.out.println(e);
         }

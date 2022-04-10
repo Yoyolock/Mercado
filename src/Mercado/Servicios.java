@@ -1,8 +1,15 @@
 package Mercado;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+
 public class Servicios {
+
 
     //SE CREAN LOS SERVICIOS CORRESPONDIENTE A LOS CLIENTES
 
@@ -22,17 +29,21 @@ public class Servicios {
     }
     public static void borrarCliente(){
         Scanner reader = new Scanner(System.in);
+
         System.out.println("Indica la ID del cliente");
         int idcliente = reader.nextInt();
+
         Funciones.borrarClienteDB(idcliente);
     }
     public static void editarCliente(){
         Scanner reader = new Scanner(System.in);
+
         System.out.println("Edite el nombre del/a cliente");
         String name = reader.nextLine();
 
         System.out.println("Indique la ID del cliente a modificar");
         int idcliente = reader.nextInt();
+
         Cliente update = new Cliente();
         update.setidcliente(idcliente);
         update.setNamePersona(name);
@@ -194,7 +205,77 @@ public class Servicios {
 
         System.out.println("Indique cual es la ID de la boleta a vizualizar");
         int idboletaquery = reader.nextInt();
-
         Funciones.mostrarBoletaDB(idboletaquery);
+    }
+    public static void registrarHorario(){
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Indique el día laboral del cual quiere agregar información");
+        String turno = reader.nextLine();
+
+        System.out.println("Indique el ID del horario");
+        int id = reader.nextInt();
+
+        System.out.println("Indique la ID de la caja");
+        int idcaja = reader.nextInt();
+
+        System.out.println("Indique la ID del cajero");
+        int idcajeros = reader.nextInt();
+
+        Horario registro = new Horario();
+        registro.setTurno(turno);
+        registro.setId(id);
+        registro.setIdcaja(idcaja);
+        registro.setIdcajeros(idcajeros);
+
+        Funciones.registrarHorarioDB(registro);
+    }
+    public static void registrarEntrada(){
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Indica la hora de entrada al dia laboral");
+        String entrada = reader.nextLine();
+
+        System.out.println("Indica la ID del día del cual quieres añadir informacón con respecto a la entrada de los tarbajadores");
+        int id = reader.nextInt();
+
+        Horario actulalizacion = new Horario();
+        actulalizacion.setId(id);
+        actulalizacion.setEntrada(entrada);
+        Funciones.registrarEntradaDB(actulalizacion);
+    }
+    public static void registrarSalida(){
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Indica la hora de salida del día laboral");
+        String salida = reader.nextLine();
+
+        System.out.println("Indica la ID del día del cual quieres añadir informacón con respecto a la entrada de los tarbajadores");
+        int id = reader.nextInt();
+
+        Horario actualizacion = new Horario();
+        actualizacion.setId(id);
+        actualizacion.setSalida(salida);
+        Funciones.registarSalidaDB(actualizacion);
+    }
+    public static void mostrarHorarios(){
+        Funciones.listarHorariosDB();
+    }
+    public static void cierreDeCaja(){
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Indique la ID del dia del cual quiere obtener información");
+        int id = reader.nextInt();
+
+        System.out.println("Indique la cantidad de ventas realizadas durante ese día");
+        int cantidadVentas = reader.nextInt();
+
+        Horario registro = new Horario();
+        registro.setId(id);
+        registro.setCantidadVentas(cantidadVentas);
+        Funciones.cierreDeCajaDB(registro);
+    }
+    public static void mostrarCierreDeCaja(){
+        Funciones.mostrarCierreDeCajaDB();
     }
 }

@@ -2,7 +2,7 @@ package Mercado;
 
 public class Boleta {
 
-    private int idboleta;
+    private int Idboleta;
     private int idcajeros;
     private int idcliente;
     private int idcaja;
@@ -14,11 +14,11 @@ public class Boleta {
     }
 
     public int getIdboleta() {
-        return idboleta;
+        return Idboleta;
     }
 
     public void setIdboleta(int idboleta) {
-        this.idboleta = idboleta;
+        this.Idboleta = idboleta;
     }
 
     public int getIdcaja() {
@@ -62,11 +62,21 @@ public class Boleta {
     }
 
     public int setIdboleta() {
-        this.idboleta = idboleta;
-        return idboleta;
+        this.Idboleta = Idboleta;
+        return Idboleta;
     }
 
     public int getidboleta() {
+        return Idboleta;
+    }
+
+    public int setidboleta() {
+        this.Idboleta = Idboleta;
+        return  Idboleta;
+    }
+
+    public int setidboleta(int idboleta) {
+        this.Idboleta = idboleta;
         return idboleta;
     }
 }

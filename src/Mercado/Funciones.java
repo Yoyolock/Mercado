@@ -1,11 +1,11 @@
 package Mercado;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import javax.swing.table.DefaultTableModel;
+
 import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.*;
 import java.util.Scanner;
 
 
@@ -67,6 +67,7 @@ public class Funciones {
                 ps.executeUpdate();
                 System.out.println("El cliente fue eliminado del registro exitosamente");
             } catch (SQLException e) {
+                System.out.println("No se pudo eliminar la información dentro del sistema");
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -359,7 +360,7 @@ public class Funciones {
             try {
                 String query = "INSERT INTO boleta (idboleta, idcaja, idcajeros, idcliente, fecha) VALUES (?,?,?,?,?)";
                 ps = connection.prepareStatement(query);
-                ps.setInt(1, boleta.getidboleta());
+                ps.setInt(1, boleta.getIdboleta());
                 ps.setInt(2, boleta.getIdcaja());
                 ps.setInt(3, boleta.getIdcajeros());
                 ps.setInt(4, boleta.getIdcliente());
@@ -397,27 +398,175 @@ public class Funciones {
         } catch (SQLException e) {
         }
     }
-
     public static void mostrarBoletaDB(int idboletaquery) {
         Conexion dbConnect = new Conexion();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement psTraevalores = null;
+        ResultSet RStraeValores = null;
+        //Se crea el objeto mostrarBoletaJSON de tipo de dato JSON
         JSONObject mostrarBoletaJSON = new JSONObject();
+        //Se añaden variables de la boleta
+        try (Connection connection = dbConnect.get_connection()){
+            String traerVariables = "SELECT * FROM boleta WHERE idboleta =" + idboletaquery;
+            psTraevalores = connection.prepareStatement(traerVariables);
+            RStraeValores = psTraevalores.executeQuery();
+            RStraeValores.next();
+            mostrarBoletaJSON.put("ID de la boleta es: ", idboletaquery);
+            mostrarBoletaJSON.put("La ID de la caja es: ", RStraeValores.getInt("idcaja"));
+            mostrarBoletaJSON.put("La ID del cajero es: ", RStraeValores.getInt("idcajeros"));
+            mostrarBoletaJSON.put("Su ID como cliente es: ", RStraeValores.getInt("idcliente"));
+            mostrarBoletaJSON.put("Fecha: ", RStraeValores.getTimestamp("fecha"));
+        }catch (SQLException e){
+            System.out.println(e);
+        }
         try (Connection connection = dbConnect.get_connection()) {
-            String query = "SELECT * FROM boletaproducto WHERE idboleta = " + idboletaquery;
-            ps = connection.prepareStatement(query);
-            rs = ps.executeQuery();
-            String [] listaProducto;
+            String productos = "SELECT * FROM boletaproducto WHERE idboleta = " + idboletaquery;
+            PreparedStatement psTraeProductos = null;
+            ResultSet queryProductos = null;
+            psTraeProductos = connection.prepareStatement(productos);
+            queryProductos = psTraeProductos.executeQuery();
 
-            while (rs.next()) {
-                String query2 = "SELECT * FROM productos WHERE productos =" + rs.getInt("idproducto");
-                ps = connection.prepareStatement(query2);
-
-                System.out.println("Producto: " + rs.getInt("idproducto"));
+            //Se crea el Arraylist de productos
+            JSONArray listaProducto = new JSONArray();
+            while (queryProductos.next()) {
+                //Se crea el JSONOBJECT del producto y se añade a la lista
+                PreparedStatement psIngresaProducto = null;
+                ResultSet rsIngresaProducto = null;
+                String producto = "SELECT * FROM productos WHERE idproducto = " + queryProductos.getInt("idproducto");
+                psIngresaProducto = connection.prepareStatement(producto);
+                rsIngresaProducto = psIngresaProducto.executeQuery();
+                rsIngresaProducto.next();
+                JSONObject productoJSON = new JSONObject();
+                productoJSON.put("Nombre: ", rsIngresaProducto.getString("nameproducto"));
+                productoJSON.put("ID del producto: ", rsIngresaProducto.getInt("idproducto"));
+                productoJSON.put("precio: ", rsIngresaProducto.getFloat("precio"));
+                listaProducto.put(productoJSON);
             }
+            //Se añade listaproducto al objeto JSON mostrarBoletaJSON
+            mostrarBoletaJSON.put("Productos: ",listaProducto);
+            System.out.println("Su boleta es: " + mostrarBoletaJSON);
+
 
         } catch (SQLException e) {
             System.out.println("\n No se pudo listar los productos");
+            System.out.println(e);
+        }
+    }
+    public static void registrarHorarioDB(Horario horario){
+        Conexion dbConnect = new Conexion();
+        try (Connection connection = dbConnect.get_connection()){
+            PreparedStatement PSregistrador = null;
+            try {
+                String horarioRegistro = "INSERT INTO registrohorario (turno, entrada, salida, idcaja, idcajeros, id, cantidadventas) VALUES (?,?,?,?,?,?,?)";
+                PSregistrador = connection.prepareStatement(horarioRegistro);
+                PSregistrador.setString(1, horario.getTurno());
+                PSregistrador.setString(2, "");
+                PSregistrador.setString(3, "");
+                PSregistrador.setInt(4, horario.getIdcaja());
+                PSregistrador.setInt(5, horario.getIdcajeros());
+                PSregistrador.setInt(6, horario.getId());
+                PSregistrador.setInt(7, horario.getCantidadVentas());
+                PSregistrador.executeUpdate();
+                System.out.println("\nSe ha registrado con exito el horario");
+            }catch (SQLException e){
+                System.out.println(e);
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    public static void registrarEntradaDB(Horario horario){
+        Conexion dbConnect = new Conexion();
+        try (Connection connection = dbConnect.get_connection()){
+            PreparedStatement PSregistroEntrada = null;
+            try {
+                String registroEntrada = "UPDATE registrohorario SET entrada = ? WHERE id = ?";
+                PSregistroEntrada = connection.prepareStatement(registroEntrada);
+                PSregistroEntrada.setString(1, horario.getEntrada());
+                PSregistroEntrada.setInt(2, horario.getId());
+                PSregistroEntrada.executeUpdate();
+                System.out.println("Se registro la entrada de forma exitosa");
+            }catch (SQLException e){
+                System.out.println(e);
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    public static void registarSalidaDB(Horario horario){
+        Conexion dbConnect = new Conexion();
+        try (Connection connection = dbConnect.get_connection()){
+            PreparedStatement PSregistroSalida = null;
+            try {
+                String registroEntrada = "UPDATE registrohorario SET salida = ? WHERE id = ?";
+                PSregistroSalida = connection.prepareStatement(registroEntrada);
+                PSregistroSalida.setString(1, horario.getSalida());
+                PSregistroSalida.setInt(2, horario.getId());
+                PSregistroSalida.executeUpdate();
+                System.out.println("Se registro la salida de forma exitosa");
+            }catch (SQLException e){
+                System.out.println(e);
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    public static void listarHorariosDB(){
+        Conexion dbConnect = new Conexion();
+        PreparedStatement PSmostrarHorarios = null;
+        ResultSet RSmostrarHorarios = null;
+
+        try (Connection connection = dbConnect.get_connection()){
+            String listarHorarios = "SELECT * FROM registrohorario";
+            PSmostrarHorarios = connection.prepareStatement(listarHorarios);
+            RSmostrarHorarios = PSmostrarHorarios.executeQuery();
+
+            while (RSmostrarHorarios.next()){
+                System.out.println("---------------------------------------------------");
+                System.out.println("ID: " + RSmostrarHorarios.getInt("id"));
+                System.out.println("Fecha: " + RSmostrarHorarios.getString("turno"));
+                System.out.println("Entrada: " + RSmostrarHorarios.getString("entrada"));
+                System.out.println("Salida: " + RSmostrarHorarios.getString("salida"));
+                System.out.println("ID caja: " + RSmostrarHorarios.getInt("idcaja"));
+                System.out.println("ID cajero: " + RSmostrarHorarios.getInt("idcajeros"));
+                System.out.println("---------------------------------------------------");
+            }
+        }catch (SQLException e){
+            System.out.println("No se pudo listar los horarios");
+            System.out.println(e);
+        }
+    }
+    public static  void cierreDeCajaDB(Horario registro){
+        Conexion dbConnect = new Conexion();
+        PreparedStatement PSmostrarCaja = null;
+        //Se añaden variables a la caja
+        try (Connection connection = dbConnect.get_connection()){
+            String mostrarCaja = "UPDATE registrohorario SET cantidadventas = ? WHERE id = ?";
+            PSmostrarCaja = connection.prepareStatement(mostrarCaja);
+            PSmostrarCaja.setInt(1, registro.getCantidadVentas());
+            PSmostrarCaja.setInt(2, registro.getId());
+            PSmostrarCaja.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    public static void mostrarCierreDeCajaDB(){
+        Conexion dbConnect = new Conexion();
+        PreparedStatement PSmostrarCierreDeCaja = null;
+        ResultSet RSmostrarCierreDeCaja = null;
+        try (Connection connection = dbConnect.get_connection()){
+            String mostrarCierreDeCaja = "SELECT cantidadventas, idcajeros, turno, idcaja FROM registrohorario";
+            PSmostrarCierreDeCaja = connection.prepareStatement(mostrarCierreDeCaja);
+            RSmostrarCierreDeCaja = PSmostrarCierreDeCaja.executeQuery();
+
+            while (RSmostrarCierreDeCaja.next()){
+                System.out.println("---------------------------------------------------");
+                System.out.println("Cantidad de ventas: " + RSmostrarCierreDeCaja.getInt("cantidadventas"));
+                System.out.println("Día del cual se adquiere información: " + RSmostrarCierreDeCaja.getString("turno"));
+                System.out.println("Caja utilizada: " + RSmostrarCierreDeCaja.getInt("idcaja"));
+                System.out.println("Cajero al servicio de la caja: " + RSmostrarCierreDeCaja.getInt("idcajeros"));
+                System.out.println("---------------------------------------------------");
+            }
+        }catch (SQLException e){
             System.out.println(e);
         }
     }
